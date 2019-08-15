@@ -1,6 +1,6 @@
 {
-    "name": "shukriadams-httputils",
-    "version": "0.0.1",
+    "name": "madscience-httputils",
+    "version": "0.0.2",
     "description": "Library of useful async-ready HTTP functions.",
     "private": false,
     "author": "shukri.adams@gmail.com",
