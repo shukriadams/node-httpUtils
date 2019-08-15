@@ -24,7 +24,7 @@ const downloadFile = async function (url, filePath){
             reject(error);
         });
 
-    }.bind(this));
+    });
 }
 
 
@@ -49,7 +49,7 @@ const downloadString = async (options)=>{
  * Downloads the target url as JSON.
  */
 const downloadJSON = async (url)=>{
-    let raw = await this.downloadString(url);
+    let raw = await downloadString(url);
     return JSON.parse(raw.body);
 }
 
