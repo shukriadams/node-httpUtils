@@ -9,7 +9,7 @@ Add to package.json :
     {
         {
             "dependencies": {
-                "madscience-node-assert": "https://github.com/shukriadams/node-httpUtils.git#0.0.1"
+                "madscience-httputils": "https://github.com/shukriadams/node-httpUtils.git#0.0.1"
         }
     }
 
