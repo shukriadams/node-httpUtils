@@ -54,7 +54,37 @@ const downloadJSON = async (url)=>{
 }
 
 
+/**
+ * 
+ */
+const postUrlString = async function(remoteUrl, body, requestOptions = {}){
+    return new Promise(function(resolve, reject) {
+        try {
+            requestOptions.url = remoteUrl;
+            requestOptions.method = 'POST';
+            requestOptions.body = body;
+            requestOptions.headers = {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            };
+
+            request(requestOptions, 
+                function(err, resp, body){
+                    if (err)
+                        return reject(err);
+                        
+                    resolve({ raw: resp, body : body});
+                }
+            );
+           
+        } catch(ex) {
+            reject(ex);
+        }
+     });
+};
+
+
 module.exports = {
+    postUrlString,
     downloadFile,
     downloadString,
     downloadJSON
