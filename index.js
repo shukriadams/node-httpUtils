@@ -83,7 +83,33 @@ const postUrlString = async function(remoteUrl, body, requestOptions = {}){
 };
 
 
+/**
+ * 
+ */
+const delet = async function(remoteUrl, requestOptions = {}){
+    return new Promise(function(resolve, reject) {
+        try {
+            requestOptions.url = remoteUrl;
+            requestOptions.method = 'DELETE';
+
+            request(requestOptions, 
+                function(err, resp, body){
+                    if (err)
+                        return reject(err);
+                        
+                    resolve({ raw: resp, body : body});
+                }
+            );
+           
+        } catch(ex) {
+            reject(ex);
+        }
+     });
+};
+
+
 module.exports = {
+    delete : delet,
     postUrlString,
     downloadFile,
     downloadString,
