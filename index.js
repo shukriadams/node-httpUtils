@@ -119,6 +119,7 @@ const delet = async function(remoteUrl, requestOptions = {}){
 
 module.exports = {
     delete : delet,
+    post,
     postUrlString,
     downloadFile,
     downloadString,
