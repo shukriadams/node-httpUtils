@@ -87,7 +87,8 @@ const postUrlString = async function(remoteUrl, body, requestOptions = {}){
     requestOptions.headers = {
         'Content-Type': 'application/x-www-form-urlencoded'
     };
-    await post(remoteUrl, body, requestOptions);
+    
+    return await post(remoteUrl, body, requestOptions);
 }
 
 
