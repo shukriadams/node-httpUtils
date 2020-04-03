@@ -61,7 +61,8 @@ const post = async function(remoteUrl, body, requestOptions = {}){
     return new Promise(function(resolve, reject) {
         try {
             requestOptions.url = remoteUrl;
-            requestOptions.method = 'POST';
+            // allow method to be explicity overridden        
+            requestOptions.method = requestOptions.method || 'POST';
             requestOptions.body = body;
 
             request(requestOptions, 
