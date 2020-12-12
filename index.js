@@ -2,6 +2,11 @@ const fs = require('fs-extra'),
     request = require('request'),
     https = require('https'),
     http = require('http')
+    
+const  _getProtocolFromUrl = function(url){
+    return url.toLowerCase().startsWith('http://') ?
+        http : https
+}
 
 
 /**
@@ -9,9 +14,8 @@ const fs = require('fs-extra'),
  */    
 const downloadFile = async function (url, filePath){
     return new Promise(async function(resolve, reject){
-        const file = fs.createWriteStream(filePath)
-            protocol = url.toLowerCase().startsWith('http://') ?
-                http : https
+        const file = fs.createWriteStream(filePath),
+            protocol = _getProtocolFromUrl(url)
 
         protocol.get(url, function(response) {
             response.pipe(file)
@@ -24,6 +28,24 @@ const downloadFile = async function (url, filePath){
             // if download fails, delete file
             fs.unlink(filePath)
             reject(error)
+        })
+
+    })
+}
+
+
+/**
+ * Gets HTTP status of an endpoint without downloading content
+ */
+const getStatus = async (url) =>{
+    return new Promise(async function(resolve, reject){
+        const protocol = _getProtocolFromUrl(url),
+            request = protocol.get(url, (response) => {
+                resolve(response.statusCode)
+            })
+        
+        request.on('error', (error) => {
+            reject(error.statusCode)
         })
 
     })
@@ -123,6 +145,7 @@ const delet = async function(remoteUrl, requestOptions = {}){
 module.exports = {
     delete : delet,
     post,
+    getStatus,
     postUrlString,
     downloadFile,
     downloadString,
