@@ -1,7 +1,7 @@
-const 
-    fs = require('fs-extra'),
+const fs = require('fs-extra'),
     request = require('request'),
-    http = require('http');
+    https = require('https'),
+    http = require('http')
 
 
 /**
@@ -9,22 +9,24 @@ const
  */    
 const downloadFile = async function (url, filePath){
     return new Promise(async function(resolve, reject){
-        const file = fs.createWriteStream(savePath);
+        const file = fs.createWriteStream(filePath)
+            protocol = url.toLowerCase().startsWith('http://') ?
+                http : https
 
-        http.get(url, function(response) {
-            response.pipe(file);
+        protocol.get(url, function(response) {
+            response.pipe(file)
             file.on('finish', function() {
                 file.close(function(){
-                    resolve();
-                });  
-            });
+                    resolve()
+                }) 
+            })
         }).on('error', function(error) {
             // if download fails, delete file
-            fs.unlink(filePath);
-            reject(error);
-        });
+            fs.unlink(filePath)
+            reject(error)
+        })
 
-    });
+    })
 }
 
 
@@ -36,12 +38,12 @@ const downloadString = async (options)=>{
         request( options, 
             (error, response) =>{
                 if (error)
-                    return reject(error);
+                    return reject(error)
 
-                resolve(response);
+                resolve(response)
             }
         )
-    });
+    })
 }
 
 
@@ -49,8 +51,8 @@ const downloadString = async (options)=>{
  * Downloads the target url as JSON.
  */
 const downloadJSON = async (url)=>{
-    let raw = await downloadString(url);
-    return JSON.parse(raw.body);
+    let raw = await downloadString(url)
+    return JSON.parse(raw.body)
 }
 
 
@@ -60,25 +62,25 @@ const downloadJSON = async (url)=>{
 const post = async function(remoteUrl, body, requestOptions = {}){
     return new Promise(function(resolve, reject) {
         try {
-            requestOptions.url = remoteUrl;
+            requestOptions.url = remoteUrl
             // allow method to be explicity overridden        
-            requestOptions.method = requestOptions.method || 'POST';
-            requestOptions.body = body;
+            requestOptions.method = requestOptions.method || 'POST'
+            requestOptions.body = body
 
             request(requestOptions, 
                 function(err, resp, body){
                     if (err)
-                        return reject(err);
+                        return reject(err)
                         
-                    resolve({ raw: resp, body : body});
+                    resolve({ raw: resp, body : body})
                 }
-            );
+            )
            
         } catch(ex) {
-            reject(ex);
+            reject(ex)
         }
-     });
-};
+     })
+}
 
 
 /**
@@ -87,9 +89,9 @@ const post = async function(remoteUrl, body, requestOptions = {}){
 const postUrlString = async function(remoteUrl, body, requestOptions = {}){
     requestOptions.headers = {
         'Content-Type': 'application/x-www-form-urlencoded'
-    };
+    }
     
-    return await post(remoteUrl, body, requestOptions);
+    return await post(remoteUrl, body, requestOptions)
 }
 
 
@@ -99,23 +101,23 @@ const postUrlString = async function(remoteUrl, body, requestOptions = {}){
 const delet = async function(remoteUrl, requestOptions = {}){
     return new Promise(function(resolve, reject) {
         try {
-            requestOptions.url = remoteUrl;
-            requestOptions.method = 'DELETE';
+            requestOptions.url = remoteUrl
+            requestOptions.method = 'DELETE'
 
             request(requestOptions, 
                 function(err, resp, body){
                     if (err)
-                        return reject(err);
+                        return reject(err)
                         
-                    resolve({ raw: resp, body : body});
+                    resolve({ raw: resp, body : body})
                 }
-            );
+            )
            
         } catch(ex) {
-            reject(ex);
+            reject(ex)
         }
-     });
-};
+     })
+}
 
 
 module.exports = {
