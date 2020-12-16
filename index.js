@@ -39,14 +39,17 @@ const downloadFile = async function (url, filePath){
  */
 const getStatus = async (url) =>{
     return new Promise(async function(resolve, reject){
-        const protocol = _getProtocolFromUrl(url),
-            request = protocol.get(url, (response) => {
+        try {
+            const protocol = _getProtocolFromUrl(url)
+            protocol.get(url, (response) => {
                 resolve(response.statusCode)
+            }).on('error', (error) => {
+                reject(error.statusCode)
             })
-        
-        request.on('error', (error) => {
-            reject(error.statusCode)
-        })
+
+        } catch (ex){
+            reject (ex)
+        }
 
     })
 }
