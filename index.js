@@ -44,7 +44,7 @@ const getStatus = async (url) =>{
             protocol.get(url, (response) => {
                 resolve(response.statusCode)
             }).on('error', (error) => {
-                reject(error.statusCode)
+                reject(error)
             })
 
         } catch (ex){
