@@ -146,6 +146,12 @@ const delet = async function(remoteUrl, requestOptions = {}){
 
 
 module.exports = {
+    ensureProtocol(url, protocol = 'http'){
+        if (url.match(/^https?:\/\//gi)) 
+            return url
+        
+        return `${protocol}://${url}`
+    },
     delete : delet,
     post,
     getStatus,
