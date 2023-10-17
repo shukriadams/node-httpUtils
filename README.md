@@ -16,3 +16,8 @@ Add to package.json :
 Import
 
     let httputils = require('madscience-httputils');
+
+## Docs
+
+Utilizes https://www.npmjs.com/package/request.
+
