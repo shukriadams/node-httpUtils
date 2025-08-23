@@ -65,6 +65,10 @@ const downloadString = async (options)=>{
                 if (error)
                     return reject(error)
 
+                // assume that response code 200 will always be set on success
+                if (response.statusCode != 200)
+                    return reject(response)
+                
                 resolve(response)
             }
         )
@@ -160,3 +164,4 @@ module.exports = {
     downloadString,
     downloadJSON
 }
+
