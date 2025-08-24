@@ -12,18 +12,30 @@ const  _getProtocolFromUrl = function(url){
 /**
  * Downloads a file and saves it locally.
  */    
-const downloadFile = async function (url, filePath){
+const downloadFile = async function (url, filePath, onProgress){
     return new Promise(async function(resolve, reject){
         const file = fs.createWriteStream(filePath),
             protocol = _getProtocolFromUrl(url)
 
         protocol.get(url, function(response) {
+            let total = parseInt(response.headers['content-length'] || '0'),
+                progress = 0
+
             response.pipe(file)
+
+            if (onProgress){
+                response.on('data', (chunk)=>{
+                    progress += chunk.length
+                    onProgress(progress, total)
+                })
+            }
+
             file.on('finish', function() {
                 file.close(function(){
                     resolve()
                 }) 
             })
+
         }).on('error', function(error) {
             // if download fails, delete file
             fs.unlink(filePath)
@@ -65,7 +77,6 @@ const downloadString = async (options)=>{
                 if (error)
                     return reject(error)
 
-                // assume that response code 200 will always be set on success
                 if (response.statusCode != 200)
                     return reject(response)
                 
@@ -150,12 +161,6 @@ const delet = async function(remoteUrl, requestOptions = {}){
 
 
 module.exports = {
-    ensureProtocol(url, protocol = 'http'){
-        if (url.match(/^https?:\/\//gi)) 
-            return url
-        
-        return `${protocol}://${url}`
-    },
     delete : delet,
     post,
     getStatus,
@@ -164,4 +169,3 @@ module.exports = {
     downloadString,
     downloadJSON
 }
-
