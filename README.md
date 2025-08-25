@@ -10,14 +10,14 @@ Add to package.json :
         {
             "dependencies": {
                 "madscience-httputils": "https://github.com/shukriadams/node-httpUtils.git#0.0.1"
+            }
         }
     }
 
 Import
 
-    let httputils = require('madscience-httputils');
+    let httputils = require('madscience-httputils')
 
 ## Docs
 
 Utilizes https://www.npmjs.com/package/request.
-
